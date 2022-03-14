@@ -27,7 +27,6 @@ source("data_loading.R")
 real_estate1 <- load_data_EDA()
 ```
 
-**Słówko o tym jak połączone zostały ramki, lub po porstu wstawienie tu kodu z pliku data_loading.R ?**
 
 ```{r}
 str(real_estate1)
@@ -47,7 +46,7 @@ vis_miss(real_estate1[1:41])
 ```{r}
 vis_miss(real_estate1[42:82])
 ```
-Jak widać w naszych danych występują kolumny z brakami danych. Jednak większość z nich występuje w specyficznym kontekście, ponieważ dotyczą głównie kolumn opisujących wyposażenie lub specyficzne pomieszczenia w mieszkaniu. Wartość NA ma oznaczać brak 'funkcji' w domu. Dlatego zamienimy wartości w tego typu kolumnach na "Absent" w przypadku kolumn typu string, natomiast na -1 w przypadku kolumn liczbowych.   
+Jak widać w naszych danych występują kolumny z brakami danych. Jednak większość z nich występuje w specyficznym kontekście, ponieważ dotyczą głównie kolumn opisujących wyposażenie lub specyficzne pomieszczenia w mieszkaniu. Wartość NA ma oznaczać brak danej 'funkcji' w domu. Dlatego zamienimy wartości w tego typu kolumnach na `Absent` w przypadku kolumn typu string, natomiast na -1 w przypadku kolumn liczbowych.   
 
 ```{r}
 names_col <- c("FireplaceQu", "GarageType", "GarageYrBlt", "GarageFinish", "GarageQual", "GarageCond", "PoolQC", "Fence", "MiscFeature", "Alley", "BsmtQual", "BsmtCond", "BsmtExposure", "BsmtFinType1", "BsmtFinType2")
@@ -77,93 +76,20 @@ Funkcja introduce rozpoznała w naszej kolumnie aż 37 kolumn ciągłych. Zapewn
 head(real_estate1[c("MSSubClass", "BsmtCond", "BsmtQual")])
 ```
 
-Kolumna MSSubClass", która liczbami koduje typ nieruchomości może zostać zmieniona na typowo tekstową zmienną dyskretną. Natomiast kolumny opisujące jakość lub warunki niektórych elementów mieszkania, zamiast używać skrótów tekstowych, mogą używać skali liczbowej do oceny. Zmiany wymagają także inne kolumny, których wartości da się zakwalifikować jako reprezentujące relacje lepszy-gorszy. 
+Kolumna `MSSubClass`, która liczbami koduje typ nieruchomości może zostać zmieniona na typowo tekstową zmienną dyskretną. Natomiast kolumny opisujące jakość lub warunki niektórych elementów mieszkania, zamiast używać skrótów tekstowych, mogą używać skali liczbowej do oceny. Zmiany wymagają także inne kolumny, których wartości da się zakwalifikować jako reprezentujące relacje lepszy-gorszy. 
 
 ```{r}
-#Zamiana liczbowa -> tesktowa
-real_estate <- real_estate %>% 
-  mutate(MSSubClass = 
-            case_when(
-              MSSubClass == 20 ~ "1-STORY 1946 & NEWER ALL STYLES",
-              MSSubClass == 30 ~ "1-STORY 1945 & OLDER",
-              MSSubClass == 40 ~ "1-STORY W/FINISHED ATTIC ALL AGES",
-              MSSubClass == 45 ~ "1-1/2 STORY - UNFINISHED ALL AGES",
-              MSSubClass == 50 ~ "1-1/2 STORY FINISHED ALL AGES",
-              MSSubClass == 60 ~ "2-STORY 1946 & NEWER",
-              MSSubClass == 70 ~ "2-STORY 1945 & OLDER",
-              MSSubClass == 75 ~ "2-1/2 STORY ALL AGES",
-              MSSubClass == 80 ~ "SPLIT OR MULTI-LEVEL",
-              MSSubClass == 85 ~ "SPLIT FOYER",
-              MSSubClass == 90 ~ "DUPLEX - ALL STYLES AND AGES",
-              MSSubClass == 120 ~ "1-STORY PUD (Planned Unit Development) - 1946 & NEWER",
-              MSSubClass == 150 ~ "1-1/2 STORY PUD - ALL AGES",
-              MSSubClass == 160 ~ "2-STORY PUD - 1946 & NEWER",
-              MSSubClass == 180 ~ "PUD - MULTILEVEL - INCL SPLIT LEV/FOYER",
-              MSSubClass == 190 ~ "2 FAMILY CONVERSION - ALL STYLES AND AGES"
-            ))
+source("preprocessing.R")
+#Zamiana liczbowa -> tekstowa
+num_var_transform(real_estate)
 ```
 
 ```{r}
 #Zamiana tesktowa -> liczbowa
 evaluating <- c("ExterQual", "ExterCond", "BsmtQual", "BsmtCond", "HeatingQC", "KitchenQual", "FireplaceQu", "GarageQual", "GarageCond", "PoolQC")
 
-for (i in 1:length(evaluating)){
-  n <- evaluating[i]
-  name <- real_estate[[n]]
-  name <- case_when(
-      is.na(name) ~ -1,
-      name == "Ex" ~ 5,
-      name == "Gd" ~ 4,
-      name == "TA" ~ 3,
-      name ==  "Fa" ~ 2,
-      name == "Po" ~ 1,
-      name == "Absent" ~ -1
-    )
-  real_estate[n] <- name
-}
-
-real_estate <- real_estate %>% 
-  mutate(BsmtExposure = case_when(
-    BsmtExposure == "Gd" ~ 3,
-    BsmtExposure == "Av" ~ 2,
-    BsmtExposure == "Mn" ~ 1,
-    BsmtExposure == "No" ~ 0,
-    BsmtExposure == "Absent" ~ -1
-  ))
-
-real_estate <- real_estate %>% 
-  mutate(BsmtFinType1 = case_when(
-    BsmtFinType1 == "GLQ" ~ 5,
-    BsmtFinType1 == "ALQ" ~ 4,
-    BsmtFinType1 == "BLQ" ~ 3,
-    BsmtFinType1 == "Rec" ~ 2,
-    BsmtFinType1 == "LwQ" ~ 1,
-    BsmtFinType1 == "Unf" ~ 0,
-    BsmtFinType1 == "Absent" ~ -1
-  )) 
-
-real_estate <- real_estate %>% 
-  mutate(BsmtFinType2 = case_when(
-    BsmtFinType2 == "GLQ" ~ 5,
-    BsmtFinType2 == "ALQ" ~ 4,
-    BsmtFinType2 == "BLQ" ~ 3,
-    BsmtFinType2 == "Rec" ~ 2,
-    BsmtFinType2 == "LwQ" ~ 1,
-    BsmtFinType2 == "Unf" ~ 0,
-    BsmtFinType2 == "Absent" ~ -1
-  )) 
-
-real_estate <- real_estate %>% 
-  mutate(Functional = case_when(
-    Functional == "Typ" ~ 7,
-    Functional == "Min1" ~ 6,
-    Functional == "Min2" ~ 5,
-    Functional == "Mod" ~ 4,
-    Functional == "Maj1" ~ 3,
-    Functional == "Maj2" ~ 2,
-    Functional == "Sev" ~ 1,
-    Functional == "Sal" ~ 0,
-  ))
+qual_var_transform(real_estate, evaluating)
+other_var_transform(real_estate)
 ```
 
 Po wstępnym przetworzeniu danych, można stwierdzić, że zmienne w zbiorze można podzielić na 3 grupy: zmienne kategoryczne, typowo ciągłe oraz oceniające, czyli takie, w których kryje się już ocena pewnych elementów. 
