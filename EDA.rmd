@@ -43,11 +43,11 @@ dim(unique(real_estate1))[1]/dim(real_estate1)[1]
 ```
 Wszystkie dane są unikalne
 
-```{r}
+```{r, echo=FALSE}
 vis_miss(real_estate1[1:41])
 ```
-```{r}
-vis_miss(real_estate1[42:82])
+```{r, echo=FALSE}
+vis_miss(real_estate1[42:80])
 ```
 Jak widać w naszych danych występują kolumny z brakami danych. Jednak większość z nich występuje w specyficznym kontekście, ponieważ dotyczą głównie kolumn opisujących wyposażenie lub specyficzne pomieszczenia w mieszkaniu. Wartość NA ma oznaczać brak danej 'funkcji' w domu. Dlatego zamienimy wartości w tego typu kolumnach na `Absent` w przypadku kolumn typu string, natomiast na -1 w przypadku kolumn liczbowych.   
 
@@ -70,81 +70,62 @@ for (i in 1:(length(names_col))) {
 
 ## Zależości między zmiennymi
 
-```{r, include=FALSE,warning=FALSE}
-plot <- ggplot(real_estate1 , aes(x=GarageType, y=SalePrice)) + 
+```{r, echo=FALSE,warning=FALSE}
+ggplot(real_estate1 , aes(x=GarageType, y=SalePrice)) + 
   geom_boxplot()+
   scale_y_continuous(labels = scales::comma)+
   theme_economist()
-```
-```{r,warning=FALSE}
-plot
 ```
 
 Na wykresie pomiędzy typem garażu, a ceną domu widać, że najwięcej nieruchomości ma garaż wbudowany w dom albo przyłączony do niego. Nieruchomości z wbudowanym garażem mają najwżyszą medianę cen, następnie za nimi domy z przyłączanym. Co interesujące to pomimo, że obiekty z wbudowanym garażem mają medianę cen najwyższą to najdroższe domy ze wszystkich mają gaże przyłączane do nich. 
 
 
-```{r, include=FALSE,warning=FALSE}
+```{r, echo=FALSE,warning=FALSE}
 plot <- ggplot(real_estate1 , aes(x=LotConfig, y=SalePrice)) + 
   geom_boxplot()+
   scale_y_continuous(labels = scales::comma)+
   theme_economist()
 ```
-```{r,warning=FALSE}
-plot
-```
 
 Z wykresu położenia widać największą ilość nieruchomości wolnostojącyh, mają one także największą medianę cen. Warto zwrócić jednak uwagę na dużą ilość obserwacji odstających dla obiektów otoczonych z każdej z 4 stron. 
 
 
-```{r, include=FALSE,warning=FALSE}
-plot <- ggplot(real_estate1 , aes(x=Foundation, y=SalePrice)) + 
+```{r, echo=FALSE,warning=FALSE}
+ggplot(real_estate1 , aes(x=Foundation, y=SalePrice)) + 
   geom_boxplot()+
   scale_y_continuous(labels = scales::comma)+
   theme_economist()
 ```
-```{r,warning=FALSE}
-plot
-```
 
 Jak widać najwięcej nieruchomości ma fundamenty z kamienia, następne w kolejności są fundamenty z betonu. O ile górny kwantyl ceny dla obu rodzaji fundamentóW jest zblizony do siebie, to widać stosunkowo niską medianę cen dla domów z kamiennymi fundamentami. Także najdroższe domy to przedewszystkim domy o betonowych fundamentach.
 
-
-```{r, include=FALSE,warning=FALSE}
+```{r, echo=FALSE,warning=FALSE}
 plot <- ggplot(real_estate1 , aes(x=LotArea, y=SalePrice)) + 
   geom_point()+
   scale_y_continuous(labels = scales::comma)+
   theme_economist()
 
 ```
-```{r,warning=FALSE}
-plot
-```
 
 Na wykresie tym chcieliśmy sprawdzić zależność pomiędzy ceną nieruchomości a wielkością. Widać pewną zależność, że im większa powierzchia tym cena większa. Istnieja jednak pewne przypadki odstające dla których poimo dużej wielkości cena jest względnie niska, oraz odwrotnie.
 
 
-```{r, include=FALSE,warning=FALSE}
-
-plot <- ggplot(real_estate1 , aes(x=YearBuilt, y=SalePrice)) + 
+```{r, echo=FALSE,warning=FALSE}
+ggplot(real_estate1 , aes(x=YearBuilt, y=SalePrice)) + 
   geom_point()+
   scale_y_continuous(labels = scales::comma)+
   theme_economist()
 ```
-```{r,warning=FALSE}
-plot
-```
+
 
 Z tego wyrkesu można wywnioskowac że im nowsze nieruchomości tym ich cena jest większa, można takze wyróżnić trzy skupiska obiektów jedno do lat 40, drugie do lat 80, a trzecie w czasach wpółczesnych.
 
 
-```{r, include=FALSE,warning=FALSE}
-plot <- ggplot(real_estate1 , aes(x=PoolArea, y=SalePrice)) + 
+```{r, echo=FALSE,warning=FALSE}
+ggplot(real_estate1 , aes(x=PoolArea, y=SalePrice)) + 
   geom_point()+
   scale_y_continuous(labels = scales::comma)+
   theme_economist()
-```
-```{r,warning=FALSE}
-plot
 ```
 
 Chcieliśmy tutaj zobaczyć czy wielkość basenu wpływa na cenę, jednak jak widać większość nieruchomości ma zerową powierzchnie basenu co jest równoznaczne z jego brakiem. A więc oznacza to, że wszystkie zmienne opisujace basen takie jak: jego wielkośc, jakość, etc cieżko brać pod uwagę przy wycenie.
@@ -153,24 +134,24 @@ Chcieliśmy tutaj zobaczyć czy wielkość basenu wpływa na cenę, jednak jak w
 
 ## Analiza rodzajów kolumn
 
-```{r}
+```{r, echo=FALSE}
 introduce(real_estate)
 ```
 Funkcja introduce rozpoznała w naszej kolumnie aż 37 kolumn ciągłych. Zapewne wynika to ze zliczenia kolumn numerycznych. Dużo kolumn numerycznych można jednak uznać za dyskretne, bo przyjmują wartości z ograniczonego zbioru np. liczba łazienek lub kuchni czy ocena ogólnych warunków. 
 
-```{r}
+```{r, echo=FALSE}
 head(real_estate1[c("MSSubClass", "BsmtCond", "BsmtQual")])
 ```
 
 Kolumna `MSSubClass`, która liczbami koduje typ nieruchomości może zostać zmieniona na typowo tekstową zmienną dyskretną. Natomiast kolumny opisujące jakość lub warunki niektórych elementów mieszkania, zamiast używać skrótów tekstowych, mogą używać skali liczbowej do oceny. Zmiany wymagają także inne kolumny, których wartości da się zakwalifikować jako reprezentujące relacje lepszy-gorszy. 
 
-```{r}
+```{r, echo=FALSE}
 source("preprocessing.R")
 #Zamiana liczbowa -> tekstowa
 num_var_transform(real_estate)
 ```
 
-```{r}
+```{r, echo=FALSE}
 #Zamiana tesktowa -> liczbowa
 evaluating <- c("ExterQual", "ExterCond", "BsmtQual", "BsmtCond", "HeatingQC", "KitchenQual", "FireplaceQu", "GarageQual", "GarageCond", "PoolQC")
 
@@ -180,7 +161,7 @@ other_var_transform(real_estate)
 
 Po wstępnym przetworzeniu danych, można stwierdzić, że zmienne w zbiorze można podzielić na 3 grupy: zmienne kategoryczne, typowo ciągłe oraz oceniające, czyli takie, w których kryje się już ocena pewnych elementów. 
 
-```{r}
+```{r, echo=FALSE}
 evaluating <- c(evaluating, "BsmtExposure", "BsmtFinType1", "BsmtFinType2", "Functional", "OverallQual", "OverallCond")
 continuous <- c("WoodDeckSF", "SalePrice", "OpenPorchSF", "GarageArea", "EnclosedPorch", "PoolArea", "X2ndFlrSF", "X1stFlrSF", "TotalBsmtSF", "GrLivArea", "YearRemodAdd", "YearBuilt", "MasVnrArea", "LotFrontage", "LotArea", "BsmtUnfSF", "BsmtFinSF1", "BsmtFinSF2")
 categorical <- colnames(real_estate)[(!colnames(real_estate) %in% evaluating) & (!colnames(real_estate) %in% continuous)]
