@@ -19,6 +19,9 @@ library(dplyr)
 library(tidyverse)
 library(DataExplorer)
 library(visdat)
+library(ggplot2)
+library(ggthemes)
+library(corrplot)
 ```
 
 ## Wczytanie danych
@@ -64,6 +67,89 @@ for (i in 1:(length(names_col))) {
   }
 }
 ```
+
+## Zależości między zmiennymi
+
+```{r, include=FALSE,warning=FALSE}
+plot <- ggplot(real_estate1 , aes(x=GarageType, y=SalePrice)) + 
+  geom_boxplot()+
+  scale_y_continuous(labels = scales::comma)+
+  theme_economist()
+```
+```{r,warning=FALSE}
+plot
+```
+
+Na wykresie pomiędzy typem garażu, a ceną domu widać, że najwięcej nieruchomości ma garaż wbudowany w dom albo przyłączony do niego. Nieruchomości z wbudowanym garażem mają najwżyszą medianę cen, następnie za nimi domy z przyłączanym. Co interesujące to pomimo, że obiekty z wbudowanym garażem mają medianę cen najwyższą to najdroższe domy ze wszystkich mają gaże przyłączane do nich. 
+
+
+```{r, include=FALSE,warning=FALSE}
+plot <- ggplot(real_estate1 , aes(x=LotConfig, y=SalePrice)) + 
+  geom_boxplot()+
+  scale_y_continuous(labels = scales::comma)+
+  theme_economist()
+```
+```{r,warning=FALSE}
+plot
+```
+
+Z wykresu położenia widać największą ilość nieruchomości wolnostojącyh, mają one także największą medianę cen. Warto zwrócić jednak uwagę na dużą ilość obserwacji odstających dla obiektów otoczonych z każdej z 4 stron. 
+
+
+```{r, include=FALSE,warning=FALSE}
+plot <- ggplot(real_estate1 , aes(x=Foundation, y=SalePrice)) + 
+  geom_boxplot()+
+  scale_y_continuous(labels = scales::comma)+
+  theme_economist()
+```
+```{r,warning=FALSE}
+plot
+```
+
+Jak widać najwięcej nieruchomości ma fundamenty z kamienia, następne w kolejności są fundamenty z betonu. O ile górny kwantyl ceny dla obu rodzaji fundamentóW jest zblizony do siebie, to widać stosunkowo niską medianę cen dla domów z kamiennymi fundamentami. Także najdroższe domy to przedewszystkim domy o betonowych fundamentach.
+
+
+```{r, include=FALSE,warning=FALSE}
+plot <- ggplot(real_estate1 , aes(x=LotArea, y=SalePrice)) + 
+  geom_point()+
+  scale_y_continuous(labels = scales::comma)+
+  theme_economist()
+
+```
+```{r,warning=FALSE}
+plot
+```
+
+Na wykresie tym chcieliśmy sprawdzić zależność pomiędzy ceną nieruchomości a wielkością. Widać pewną zależność, że im większa powierzchia tym cena większa. Istnieja jednak pewne przypadki odstające dla których poimo dużej wielkości cena jest względnie niska, oraz odwrotnie.
+
+
+```{r, include=FALSE,warning=FALSE}
+
+plot <- ggplot(real_estate1 , aes(x=YearBuilt, y=SalePrice)) + 
+  geom_point()+
+  scale_y_continuous(labels = scales::comma)+
+  theme_economist()
+```
+```{r,warning=FALSE}
+plot
+```
+
+Z tego wyrkesu można wywnioskowac że im nowsze nieruchomości tym ich cena jest większa, można takze wyróżnić trzy skupiska obiektów jedno do lat 40, drugie do lat 80, a trzecie w czasach wpółczesnych.
+
+
+```{r, include=FALSE,warning=FALSE}
+plot <- ggplot(real_estate1 , aes(x=PoolArea, y=SalePrice)) + 
+  geom_point()+
+  scale_y_continuous(labels = scales::comma)+
+  theme_economist()
+```
+```{r,warning=FALSE}
+plot
+```
+
+Chcieliśmy tutaj zobaczyć czy wielkość basenu wpływa na cenę, jednak jak widać większość nieruchomości ma zerową powierzchnie basenu co jest równoznaczne z jego brakiem. A więc oznacza to, że wszystkie zmienne opisujace basen takie jak: jego wielkośc, jakość, etc cieżko brać pod uwagę przy wycenie.
+
+
 
 ## Analiza rodzajów kolumn
 
