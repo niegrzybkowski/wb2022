@@ -58,16 +58,16 @@ vis_miss(real_estate1[1:41]) +
     plot.margin = unit(
       c(5, 50, 5, 5), "points"
     )
-  )
+  ) + 
+  ggtitle("Brakujące dane w zbiorze (część 1)")
 
-```
-```{r, echo=FALSE, warning=FALSE}
 vis_miss(real_estate1[42:80]) + 
   theme(
     plot.margin = unit(
       c(5, 50, 5, 5), "points"
     )
-  )
+  ) + 
+  ggtitle("Brakujące dane w zbiorze (część 2)")
 ```
 
 Jak widać w naszych danych występują kolumny z brakami danych. Jednak większość z nich występuje w specyficznym kontekście, ponieważ dotyczą głównie kolumn opisujących wyposażenie lub specyficzne pomieszczenia w mieszkaniu. Wartość NA ma oznaczać brak danej 'funkcji' w domu. Dlatego zamienimy wartości w tego typu kolumnach na `Absent` w przypadku kolumn typu string, natomiast na -1 w przypadku kolumn liczbowych.   
@@ -100,15 +100,16 @@ vis_miss(real_estate[1:41]) +
     plot.margin = unit(
       c(5, 50, 5, 5), "points"
     )
-  )
-```
-```{r, echo=FALSE, warning=FALSE}
+  ) + 
+  ggtitle("Brakujące dane w zbiorze (poprawka, część 1)")
+
 vis_miss(real_estate[42:80]) + 
   theme(
     plot.margin = unit(
       c(5, 50, 5, 5), "points"
     )
-  )
+  ) + 
+  ggtitle("Brakujące dane w zbiorze (poprawka, część 1)")
 ```
 
 ## Analiza rodzajów kolumn
@@ -161,20 +162,22 @@ real_estate <- real_estate %>%
 ```
 
 ```{r, echo=FALSE}
-tibble(
-  discrete_columns = length(categorical),
-  ordered_columns = length(evaluating),
-  continuous_columns = length(continuous),
-)
-```
-
-```{r, echo=FALSE}
-# TODO: dodać komentarz
-vis_dat(real_estate) +
-  theme(
-    axis.text.x = element_blank(),
-    axis.ticks.length.x = unit(0, "points")
+col_type_data <- tibble(
+  Dyskretna = length(categorical),
+  `Uporządkowana` = length(evaluating),
+  `Ciągła` = length(continuous),
+) %>%
+  pivot_longer(
+    c("Dyskretna", "Uporządkowana", "Ciągła")) %>%
+  rename(
+    `Typ kolumny` = name,
+    `Liczba kolumn` = value
   )
+ggplot(col_type_data) +
+  geom_col(aes(x=`Typ kolumny`, y=`Liczba kolumn`), fill="lightblue") +
+  geom_label(aes(x=`Typ kolumny`, y=`Liczba kolumn`, label=`Liczba kolumn`)) +
+  ggtitle("Podział kolumn na typy") + 
+  theme_bw()
 ```
 
 ## Zależości między zmiennymi
@@ -183,7 +186,7 @@ vis_dat(real_estate) +
 ggplot(real_estate1 , aes(x=GarageType, y=SalePrice)) + 
   geom_boxplot()+
   scale_y_continuous(labels = scales::comma)+
-  theme_economist()
+  theme_bw()
 ```
 
 Na wykresie pomiędzy typem garażu, a ceną domu widać, że najwięcej nieruchomości ma garaż wbudowany w dom albo przyłączony do niego. Nieruchomości z wbudowanym garażem mają najwżyszą medianę cen, następnie za nimi domy z przyłączanym. Co interesujące to pomimo, że obiekty z wbudowanym garażem mają medianę cen najwyższą to najdroższe domy ze wszystkich mają gaże przyłączane do nich. 
@@ -193,7 +196,7 @@ Na wykresie pomiędzy typem garażu, a ceną domu widać, że najwięcej nieruch
 plot <- ggplot(real_estate1 , aes(x=LotConfig, y=SalePrice)) + 
   geom_boxplot()+
   scale_y_continuous(labels = scales::comma)+
-  theme_economist()
+  theme_bw()
 ```
 
 Z wykresu położenia widać największą ilość nieruchomości wolnostojącyh, mają one także największą medianę cen. Warto zwrócić jednak uwagę na dużą ilość obserwacji odstających dla obiektów otoczonych z każdej z 4 stron. 
@@ -203,7 +206,7 @@ Z wykresu położenia widać największą ilość nieruchomości wolnostojącyh,
 ggplot(real_estate1 , aes(x=Foundation, y=SalePrice)) + 
   geom_boxplot()+
   scale_y_continuous(labels = scales::comma)+
-  theme_economist()
+  theme_bw()
 ```
 
 Jak widać najwięcej nieruchomości ma fundamenty z kamienia, następne w kolejności są fundamenty z betonu. O ile górny kwantyl ceny dla obu rodzaji fundamentóW jest zblizony do siebie, to widać stosunkowo niską medianę cen dla domów z kamiennymi fundamentami. Także najdroższe domy to przedewszystkim domy o betonowych fundamentach.
@@ -212,7 +215,7 @@ Jak widać najwięcej nieruchomości ma fundamenty z kamienia, następne w kolej
 plot <- ggplot(real_estate1 , aes(x=LotArea, y=SalePrice)) + 
   geom_point()+
   scale_y_continuous(labels = scales::comma)+
-  theme_economist()
+  theme_bw()
 
 ```
 
@@ -223,7 +226,7 @@ Na wykresie tym chcieliśmy sprawdzić zależność pomiędzy ceną nieruchomoś
 ggplot(real_estate1 , aes(x=YearBuilt, y=SalePrice)) + 
   geom_point()+
   scale_y_continuous(labels = scales::comma)+
-  theme_economist()
+  theme_bw()
 ```
 
 
@@ -234,7 +237,7 @@ Z tego wyrkesu można wywnioskowac że im nowsze nieruchomości tym ich cena jes
 ggplot(real_estate1 , aes(x=PoolArea, y=SalePrice)) + 
   geom_point()+
   scale_y_continuous(labels = scales::comma)+
-  theme_economist()
+  theme_bw()
 ```
 
 Chcieliśmy tutaj zobaczyć czy wielkość basenu wpływa na cenę, jednak jak widać większość nieruchomości ma zerową powierzchnie basenu co jest równoznaczne z jego brakiem. A więc oznacza to, że wszystkie zmienne opisujace basen takie jak: jego wielkośc, jakość, etc cieżko brać pod uwagę przy wycenie.
