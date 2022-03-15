@@ -30,11 +30,16 @@ source("data_loading.R")
 real_estate1 <- load_data_EDA()
 ```
 
+Dane opisują stan i wycenę nieruchomości w Ames, Iowa. 
+Jest to średniej wielkości miasto w Stanach Zjednoczonych, w 2020 66 tyś. mieszkańców.
+Ames jest znane jako miasto, w którym jest siedziba Iowa State University, gdzie uczy się około 33 tyś. studentów.
+To oznacza że okoła połowa mieszkańców tego miasta to studenci!
+
+Zbiór danych składa się z 79 cech opisujących jakość nieruchomości, jednej etykiety (cena) oraz kolumny identyfikacyjnej. Cały zbiór jest podzielony na zbiór testowy (1459 obserwacji) i treningowy (1460 obserwacji). Na czas EDA połączyliśmy te zbiory (2919 obserwacji), i wzbogaciliśmy o kolumnę `DATASET`, informującą o pochodzeniu obserwacji. 
 
 ```{r}
 colnames(real_estate1)
 ```
-W ramce znajdują się 82 kolumny i 2919 rekordów. Kolumny reprezentują dane zarówno numeryczne jak i tesktowe. 
 
 ## Unikalność i braki danych
 Najpierw sprawdzimy unikalność obserwacji.
