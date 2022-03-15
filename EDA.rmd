@@ -178,7 +178,8 @@ Chcieliśmy tutaj zobaczyć czy wielkość basenu wpływa na cenę, jednak jak w
 ## Analiza rodzajów kolumn
 
 ```{r, echo=FALSE}
-introduce(real_estate)
+introduce(real_estate) %>% 
+  select(columns, discrete_columns, continuous_columns)
 ```
 Funkcja introduce rozpoznała w naszej kolumnie aż 37 kolumn ciągłych. Zapewne wynika to ze zliczenia kolumn numerycznych. Dużo kolumn numerycznych można jednak uznać za dyskretne, bo przyjmują wartości z ograniczonego zbioru np. liczba łazienek lub kuchni czy ocena ogólnych warunków. 
 
@@ -218,4 +219,15 @@ continuous <- c(
 categorical <- colnames(real_estate)[
   (!colnames(real_estate) %in% evaluating) &
   (!colnames(real_estate) %in% continuous)]
+
+real_estate <- real_estate %>%
+    mutate(across(any_of(continuous), as.numeric))
+```
+
+```{r, echo=FALSE}
+tibble(
+  discrete_columns = length(categorical),
+  ordered_columns = length(evaluating),
+  continuous_columns = length(continuous),
+)
 ```
