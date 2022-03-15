@@ -180,6 +180,43 @@ ggplot(col_type_data) +
   theme_bw()
 ```
 
+## Analiza niektórych zmiennych
+
+```{r, echo=FALSE,warning=FALSE}
+ggplot(real_estate1 ,aes(x=MSZoning)) + 
+  geom_bar()+
+  scale_y_continuous(labels = scales::comma)+
+  theme_bw()+
+  ggtitle("Rodzaj budynku")
+```
+
+Jak widać przeważająca ilość nieruchomości to budynki mieszkalne o niskiej lub średniej gęstości.
+
+
+```{r, echo=FALSE,warning=FALSE}
+ggplot(real_estate1 ,aes(x=Neighborhood)) + 
+  geom_bar()+
+  scale_y_continuous(labels = scales::comma)+
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
+  ggtitle("Dzielnica w której znajduje się obiekt")
+```
+
+Położenie budynków jak widać nie jest równomiernie rozłożone na tle dzielnic, najwięcej nieruchomości jest z Północnego Ames. Dzielnica ta znacząco wyróżnia się na tle pozostałych. Sa także dzielnice jak np. Blueste gdzie widać bardzo małą ilość obiektóW które były na sprzedaż. 
+
+
+```{r, echo=FALSE,warning=FALSE}
+ggplot(real_estate1 ,aes(x=Utilities)) + 
+  geom_bar()+
+  scale_y_continuous(labels = scales::comma)+
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
+  ggtitle("Usługi komunalne w obiekcie")
+```
+
+Jak widać zmienna ta nie wnosi żadnej wartości w nasze dane, praktycznie wszystkie obiekty poza pojedynczymi przypadkami mają wszystkie usługi. Analizowanie zmiennej dla której wszystkie obserwacje mają tą samą wartość nie ma sensu.
+
+
 ## Zależości między zmiennymi
 
 ```{r, echo=FALSE,warning=FALSE}
