@@ -238,3 +238,18 @@ ggplot(real_estate1 , aes(x=PoolArea, y=SalePrice)) +
 ```
 
 Chcieliśmy tutaj zobaczyć czy wielkość basenu wpływa na cenę, jednak jak widać większość nieruchomości ma zerową powierzchnie basenu co jest równoznaczne z jego brakiem. A więc oznacza to, że wszystkie zmienne opisujace basen takie jak: jego wielkośc, jakość, etc cieżko brać pod uwagę przy wycenie.
+
+```{r, echo=FALSE}
+vis_cor(
+  real_estate %>%
+    filter(!is.na(SalePrice)) %>%
+    select(all_of(continuous)) %>%
+    # Kind of a hacky way of reordering elements in matrix. But hey, it works.
+    rename(' SalePrice' = SalePrice) ) + 
+  ggtitle("Macierz korelacji dla zmiennych ciągłych")
+```
+
+Nie występują bardzo silne korelacje dodatnie w naszych zmiennych ciągłych, z kilkoma wyjątkami. 
+Co ciekawe, jest bardzo mało ujemnych korelacji. 
+Jest możliwe, że jest to spowodowane specyfiką nieruchomości.
+Jeżeli dom stoi na dużej działce, to najprawdopodobniej będzie proporcjonalny do niej.
