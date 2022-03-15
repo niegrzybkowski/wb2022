@@ -73,7 +73,10 @@ vis_miss(real_estate1[42:80]) +
 Jak widać w naszych danych występują kolumny z brakami danych. Jednak większość z nich występuje w specyficznym kontekście, ponieważ dotyczą głównie kolumn opisujących wyposażenie lub specyficzne pomieszczenia w mieszkaniu. Wartość NA ma oznaczać brak danej 'funkcji' w domu. Dlatego zamienimy wartości w tego typu kolumnach na `Absent` w przypadku kolumn typu string, natomiast na -1 w przypadku kolumn liczbowych.   
 
 ```{r}
-names_col <- c("FireplaceQu", "GarageType", "GarageYrBlt", "GarageFinish", "GarageQual", "GarageCond", "PoolQC", "Fence", "MiscFeature", "Alley", "BsmtQual", "BsmtCond", "BsmtExposure", "BsmtFinType1", "BsmtFinType2")
+names_col <- c(
+  "FireplaceQu", "GarageType", "GarageYrBlt", "GarageFinish", "GarageQual",
+  "GarageCond", "PoolQC", "Fence", "MiscFeature", "Alley", "BsmtQual",
+  "BsmtCond", "BsmtExposure", "BsmtFinType1", "BsmtFinType2")
 real_estate <- real_estate1
 for (i in 1:(length(names_col))) {
   n <- names_col[i]
@@ -193,16 +196,26 @@ num_var_transform(real_estate)
 
 ```{r, echo=FALSE}
 #Zamiana tesktowa -> liczbowa
-evaluating <- c("ExterQual", "ExterCond", "BsmtQual", "BsmtCond", "HeatingQC", "KitchenQual", "FireplaceQu", "GarageQual", "GarageCond", "PoolQC")
+quality_variables <- c(
+  "ExterQual", "ExterCond", "BsmtQual", "BsmtCond", "HeatingQC",
+  "KitchenQual", "FireplaceQu", "GarageQual", "GarageCond", "PoolQC")
 
-qual_var_transform(real_estate, evaluating)
+qual_var_transform(real_estate, quality_variables)
 other_var_transform(real_estate)
 ```
 
-Po wstępnym przetworzeniu danych, można stwierdzić, że zmienne w zbiorze można podzielić na 3 grupy: zmienne kategoryczne, typowo ciągłe oraz oceniające, czyli takie, w których kryje się już ocena pewnych elementów. 
+Po wstępnym przetworzeniu danych, można stwierdzić, że zmienne w zbiorze można podzielić na 3 grupy: zmienne kategoryczne, typowo ciągłe oraz oceniające (uporządkowane kategoryczne), czyli takie, w których kryje się już ocena pewnych elementów. 
 
 ```{r, echo=FALSE}
-evaluating <- c(evaluating, "BsmtExposure", "BsmtFinType1", "BsmtFinType2", "Functional", "OverallQual", "OverallCond")
-continuous <- c("WoodDeckSF", "SalePrice", "OpenPorchSF", "GarageArea", "EnclosedPorch", "PoolArea", "X2ndFlrSF", "X1stFlrSF", "TotalBsmtSF", "GrLivArea", "YearRemodAdd", "YearBuilt", "MasVnrArea", "LotFrontage", "LotArea", "BsmtUnfSF", "BsmtFinSF1", "BsmtFinSF2")
-categorical <- colnames(real_estate)[(!colnames(real_estate) %in% evaluating) & (!colnames(real_estate) %in% continuous)]
+evaluating <- c(
+  quality_variables, "BsmtExposure", "BsmtFinType1", "BsmtFinType2",
+  "Functional", "OverallQual", "OverallCond")
+continuous <- c(
+  "WoodDeckSF", "SalePrice", "OpenPorchSF", "GarageArea", "EnclosedPorch",
+  "PoolArea", "X2ndFlrSF", "X1stFlrSF", "TotalBsmtSF", "GrLivArea",
+  "YearRemodAdd", "YearBuilt", "MasVnrArea", "LotFrontage", "LotArea",
+  "BsmtUnfSF", "BsmtFinSF1", "BsmtFinSF2")
+categorical <- colnames(real_estate)[
+  (!colnames(real_estate) %in% evaluating) &
+  (!colnames(real_estate) %in% continuous)]
 ```
