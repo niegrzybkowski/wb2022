@@ -24,7 +24,7 @@ library(ggthemes)
 library(corrplot)
 ```
 
-## Wczytanie danych
+## Wstęp
 ```{r}
 source("data_loading.R")
 real_estate1 <- load_data_EDA()
@@ -111,6 +111,63 @@ vis_miss(real_estate[42:80]) +
   )
 ```
 
+## Analiza rodzajów kolumn
+
+```{r, echo=FALSE}
+introduce(real_estate) %>% 
+  select(columns, discrete_columns, continuous_columns)
+```
+Funkcja introduce rozpoznała w naszej kolumnie aż 37 kolumn ciągłych. Zapewne wynika to ze zliczenia kolumn numerycznych. Dużo kolumn numerycznych można jednak uznać za dyskretne, bo przyjmują wartości z ograniczonego zbioru np. liczba łazienek lub kuchni czy ocena ogólnych warunków. 
+
+```{r, echo=FALSE}
+head(real_estate1[c("MSSubClass", "BsmtCond", "BsmtQual")])
+```
+
+Kolumna `MSSubClass`, która liczbami koduje typ nieruchomości może zostać zmieniona na typowo tekstową zmienną dyskretną. Natomiast kolumny opisujące jakość lub warunki niektórych elementów mieszkania, zamiast używać skrótów tekstowych, mogą używać skali liczbowej do oceny. Zmiany wymagają także inne kolumny, których wartości da się zakwalifikować jako reprezentujące relacje lepszy-gorszy. 
+
+```{r, echo=FALSE}
+source("preprocessing.R")
+#Zamiana liczbowa -> tekstowa
+num_var_transform(real_estate)
+```
+
+```{r, echo=FALSE}
+#Zamiana tesktowa -> liczbowa
+quality_variables <- c(
+  "ExterQual", "ExterCond", "BsmtQual", "BsmtCond", "HeatingQC",
+  "KitchenQual", "FireplaceQu", "GarageQual", "GarageCond", "PoolQC")
+
+qual_var_transform(real_estate, quality_variables)
+other_var_transform(real_estate)
+```
+
+Po wstępnym przetworzeniu danych, można stwierdzić, że zmienne w zbiorze można podzielić na 3 grupy: zmienne kategoryczne, typowo ciągłe oraz oceniające (uporządkowane kategoryczne), czyli takie, w których kryje się już ocena pewnych elementów. 
+
+```{r, echo=FALSE}
+evaluating <- c(
+  quality_variables, "BsmtExposure", "BsmtFinType1", "BsmtFinType2",
+  "Functional", "OverallQual", "OverallCond")
+continuous <- c(
+  "WoodDeckSF", "SalePrice", "OpenPorchSF", "GarageArea", "EnclosedPorch",
+  "PoolArea", "X2ndFlrSF", "X1stFlrSF", "TotalBsmtSF", "GrLivArea",
+  "YearRemodAdd", "YearBuilt", "MasVnrArea", "LotFrontage", "LotArea",
+  "BsmtUnfSF", "BsmtFinSF1", "BsmtFinSF2")
+categorical <- colnames(real_estate)[
+  (!colnames(real_estate) %in% evaluating) &
+  (!colnames(real_estate) %in% continuous)]
+
+real_estate <- real_estate %>%
+    mutate(across(any_of(continuous), as.numeric))
+```
+
+```{r, echo=FALSE}
+tibble(
+  discrete_columns = length(categorical),
+  ordered_columns = length(evaluating),
+  continuous_columns = length(continuous),
+)
+```
+
 ## Zależości między zmiennymi
 
 ```{r, echo=FALSE,warning=FALSE}
@@ -172,62 +229,3 @@ ggplot(real_estate1 , aes(x=PoolArea, y=SalePrice)) +
 ```
 
 Chcieliśmy tutaj zobaczyć czy wielkość basenu wpływa na cenę, jednak jak widać większość nieruchomości ma zerową powierzchnie basenu co jest równoznaczne z jego brakiem. A więc oznacza to, że wszystkie zmienne opisujace basen takie jak: jego wielkośc, jakość, etc cieżko brać pod uwagę przy wycenie.
-
-
-
-## Analiza rodzajów kolumn
-
-```{r, echo=FALSE}
-introduce(real_estate) %>% 
-  select(columns, discrete_columns, continuous_columns)
-```
-Funkcja introduce rozpoznała w naszej kolumnie aż 37 kolumn ciągłych. Zapewne wynika to ze zliczenia kolumn numerycznych. Dużo kolumn numerycznych można jednak uznać za dyskretne, bo przyjmują wartości z ograniczonego zbioru np. liczba łazienek lub kuchni czy ocena ogólnych warunków. 
-
-```{r, echo=FALSE}
-head(real_estate1[c("MSSubClass", "BsmtCond", "BsmtQual")])
-```
-
-Kolumna `MSSubClass`, która liczbami koduje typ nieruchomości może zostać zmieniona na typowo tekstową zmienną dyskretną. Natomiast kolumny opisujące jakość lub warunki niektórych elementów mieszkania, zamiast używać skrótów tekstowych, mogą używać skali liczbowej do oceny. Zmiany wymagają także inne kolumny, których wartości da się zakwalifikować jako reprezentujące relacje lepszy-gorszy. 
-
-```{r, echo=FALSE}
-source("preprocessing.R")
-#Zamiana liczbowa -> tekstowa
-num_var_transform(real_estate)
-```
-
-```{r, echo=FALSE}
-#Zamiana tesktowa -> liczbowa
-quality_variables <- c(
-  "ExterQual", "ExterCond", "BsmtQual", "BsmtCond", "HeatingQC",
-  "KitchenQual", "FireplaceQu", "GarageQual", "GarageCond", "PoolQC")
-
-qual_var_transform(real_estate, quality_variables)
-other_var_transform(real_estate)
-```
-
-Po wstępnym przetworzeniu danych, można stwierdzić, że zmienne w zbiorze można podzielić na 3 grupy: zmienne kategoryczne, typowo ciągłe oraz oceniające (uporządkowane kategoryczne), czyli takie, w których kryje się już ocena pewnych elementów. 
-
-```{r, echo=FALSE}
-evaluating <- c(
-  quality_variables, "BsmtExposure", "BsmtFinType1", "BsmtFinType2",
-  "Functional", "OverallQual", "OverallCond")
-continuous <- c(
-  "WoodDeckSF", "SalePrice", "OpenPorchSF", "GarageArea", "EnclosedPorch",
-  "PoolArea", "X2ndFlrSF", "X1stFlrSF", "TotalBsmtSF", "GrLivArea",
-  "YearRemodAdd", "YearBuilt", "MasVnrArea", "LotFrontage", "LotArea",
-  "BsmtUnfSF", "BsmtFinSF1", "BsmtFinSF2")
-categorical <- colnames(real_estate)[
-  (!colnames(real_estate) %in% evaluating) &
-  (!colnames(real_estate) %in% continuous)]
-
-real_estate <- real_estate %>%
-    mutate(across(any_of(continuous), as.numeric))
-```
-
-```{r, echo=FALSE}
-tibble(
-  discrete_columns = length(categorical),
-  ordered_columns = length(evaluating),
-  continuous_columns = length(continuous),
-)
-```
