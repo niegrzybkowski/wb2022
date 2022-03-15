@@ -32,7 +32,7 @@ real_estate1 <- load_data_EDA()
 
 
 ```{r}
-str(real_estate1)
+colnames(real_estate1)
 ```
 W ramce znajdują się 82 kolumny i 2919 rekordów. Kolumny reprezentują dane zarówno numeryczne jak i tesktowe. 
 
