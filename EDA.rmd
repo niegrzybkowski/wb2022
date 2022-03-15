@@ -168,6 +168,15 @@ tibble(
 )
 ```
 
+```{r, echo=FALSE}
+# TODO: dodać komentarz
+vis_dat(real_estate) +
+  theme(
+    axis.text.x = element_blank(),
+    axis.ticks.length.x = unit(0, "points")
+  )
+```
+
 ## Zależości między zmiennymi
 
 ```{r, echo=FALSE,warning=FALSE}
