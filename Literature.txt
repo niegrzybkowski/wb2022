@@ -36,3 +36,9 @@ Krótki opis: W tym artykule autorzy porównują zdolność predykcyjną wyceny 
 maszyny wektorów nośnych i meotdy najmniejsych kwadratów. Bazują na danych dotyczących zabudowań miejskich w Santiago, Chile. Wnioskują,
 że metoda losowych losów poradziło sobie najlepiej w przewidywaniu ceny posiadłości, ale podkreślają, że techniki uczenia maszynowego 
 generalnie stanowią dobre narzędzie do zdobywania informacji o rynku nieruchomości.
+
+5. Real estate price estimation in French cities using geocoding and machine learning
+Autorzy: Dieudonné Tchuente, Serge Nyawa
+Rok: 2021
+Link: https://doi.org/10.1007/s10479-021-03932-5
+Krótki opis: W tym artykule autorzy przewidują ceny nieruchomości w Francji wykorzustując w tym celu geolokalizacje oraz techniki uczenia maszynowego. Porównują siedom motod uczelnia maszynowego. Z artykułu wynika, że najlepsze predykcje dają sieci neuronowego oraz las losowy.
