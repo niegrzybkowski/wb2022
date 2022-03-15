@@ -161,20 +161,22 @@ real_estate <- real_estate %>%
 ```
 
 ```{r, echo=FALSE}
-tibble(
-  discrete_columns = length(categorical),
-  ordered_columns = length(evaluating),
-  continuous_columns = length(continuous),
-)
-```
-
-```{r, echo=FALSE}
-# TODO: dodać komentarz
-vis_dat(real_estate) +
-  theme(
-    axis.text.x = element_blank(),
-    axis.ticks.length.x = unit(0, "points")
+col_type_data <- tibble(
+  Dyskretna = length(categorical),
+  `Uporządkowana` = length(evaluating),
+  `Ciągła` = length(continuous),
+) %>%
+  pivot_longer(
+    c("Dyskretna", "Uporządkowana", "Ciągła")) %>%
+  rename(
+    `Typ kolumny` = name,
+    `Liczba kolumn` = value
   )
+ggplot(col_type_data) +
+  geom_col(aes(x=`Typ kolumny`, y=`Liczba kolumn`), fill="lightblue") +
+  geom_label(aes(x=`Typ kolumny`, y=`Liczba kolumn`, label=`Liczba kolumn`)) +
+  ggtitle("Podział kolumn na typy") + 
+  theme_bw()
 ```
 
 ## Zależości między zmiennymi
