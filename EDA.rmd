@@ -68,6 +68,15 @@ for (i in 1:(length(names_col))) {
 }
 ```
 
+Po zastosowaniu poprawki, liczba braków znacznie się zmniejszyła.
+
+```{r, echo=FALSE, warning=FALSE}
+vis_miss(real_estate[1:41])
+```
+```{r, echo=FALSE, warning=FALSE}
+vis_miss(real_estate[42:80])
+```
+
 ## Zależości między zmiennymi
 
 ```{r, echo=FALSE,warning=FALSE}
