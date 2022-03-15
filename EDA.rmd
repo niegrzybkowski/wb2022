@@ -37,11 +37,15 @@ str(real_estate1)
 W ramce znajdują się 82 kolumny i 2919 rekordów. Kolumny reprezentują dane zarówno numeryczne jak i tesktowe. 
 
 ## Unikalność i braki danych
+Najpierw sprawdzimy unikalność obserwacji.
 
 ```{r}
-dim(unique(real_estate1))[1]/dim(real_estate1)[1]
+nrow(unique(real_estate1)) == nrow(real_estate1)
 ```
-Wszystkie dane są unikalne
+
+Z tym nie ma problemu, wszystkie obserwacje są unikalne.
+
+Jednak inaczej wyglądają braki w danych:
 
 ```{r, echo=FALSE, warning=FALSE}
 vis_miss(real_estate1[1:41]) + 
