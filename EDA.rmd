@@ -58,16 +58,16 @@ vis_miss(real_estate1[1:41]) +
     plot.margin = unit(
       c(5, 50, 5, 5), "points"
     )
-  )
+  ) + 
+  ggtitle("Brakujące dane w zbiorze (część 1)")
 
-```
-```{r, echo=FALSE, warning=FALSE}
 vis_miss(real_estate1[42:80]) + 
   theme(
     plot.margin = unit(
       c(5, 50, 5, 5), "points"
     )
-  )
+  ) + 
+  ggtitle("Brakujące dane w zbiorze (część 2)")
 ```
 
 Jak widać w naszych danych występują kolumny z brakami danych. Jednak większość z nich występuje w specyficznym kontekście, ponieważ dotyczą głównie kolumn opisujących wyposażenie lub specyficzne pomieszczenia w mieszkaniu. Wartość NA ma oznaczać brak danej 'funkcji' w domu. Dlatego zamienimy wartości w tego typu kolumnach na `Absent` w przypadku kolumn typu string, natomiast na -1 w przypadku kolumn liczbowych.   
@@ -100,15 +100,16 @@ vis_miss(real_estate[1:41]) +
     plot.margin = unit(
       c(5, 50, 5, 5), "points"
     )
-  )
-```
-```{r, echo=FALSE, warning=FALSE}
+  ) + 
+  ggtitle("Brakujące dane w zbiorze (poprawka, część 1)")
+
 vis_miss(real_estate[42:80]) + 
   theme(
     plot.margin = unit(
       c(5, 50, 5, 5), "points"
     )
-  )
+  ) + 
+  ggtitle("Brakujące dane w zbiorze (poprawka, część 1)")
 ```
 
 ## Analiza rodzajów kolumn
