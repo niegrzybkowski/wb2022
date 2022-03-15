@@ -43,10 +43,10 @@ dim(unique(real_estate1))[1]/dim(real_estate1)[1]
 ```
 Wszystkie dane są unikalne
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, warning=FALSE}
 vis_miss(real_estate1[1:41])
 ```
-```{r, echo=FALSE}
+```{r, echo=FALSE, warning=FALSE}
 vis_miss(real_estate1[42:80])
 ```
 Jak widać w naszych danych występują kolumny z brakami danych. Jednak większość z nich występuje w specyficznym kontekście, ponieważ dotyczą głównie kolumn opisujących wyposażenie lub specyficzne pomieszczenia w mieszkaniu. Wartość NA ma oznaczać brak danej 'funkcji' w domu. Dlatego zamienimy wartości w tego typu kolumnach na `Absent` w przypadku kolumn typu string, natomiast na -1 w przypadku kolumn liczbowych.   
