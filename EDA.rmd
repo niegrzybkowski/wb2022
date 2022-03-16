@@ -217,6 +217,30 @@ ggplot(real_estate1 ,aes(x=Utilities)) +
 Jak widać zmienna ta nie wnosi żadnej wartości w nasze dane, praktycznie wszystkie obiekty poza pojedynczymi przypadkami mają wszystkie usługi. Analizowanie zmiennej dla której wszystkie obserwacje mają tą samą wartość nie ma sensu.
 
 
+```{r, echo=FALSE,warning=FALSE}
+ggplot(real_estate1 ,aes(x=GarageType)) + 
+  geom_bar()+
+  scale_y_continuous(labels = scales::comma)+
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
+  ggtitle("Rodzaj garażu w obiekcie")
+```
+
+Jak widać przeważająca ilość domóW ma garaże wbudowane lub dołączane do domów.
+
+
+```{r, echo=FALSE,warning=FALSE}
+ggplot(real_estate1 ,aes(x=Foundation)) + 
+  geom_bar()+
+  scale_y_continuous(labels = scales::comma)+
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
+  ggtitle("Rodzaj fundamentu w obiekcie")
+```
+
+Można zauważayż, że pomimo iż rodzaji fundamtentóW jest 6 to większość obiektów ma tak na prawdę 1 z 3 rodzajów.
+
+
 ## Zależości między zmiennymi
 
 ```{r, echo=FALSE,warning=FALSE}
@@ -227,7 +251,7 @@ ggplot(real_estate1 , aes(x=GarageType, y=SalePrice)) +
   ggtitle("Zależność typu garażu a ceny.")
 ```
 
-Na wykresie pomiędzy typem garażu, a ceną domu widać, że najwięcej nieruchomości ma garaż wbudowany w dom albo przyłączony do niego. Nieruchomości z wbudowanym garażem mają najwżyszą medianę cen, następnie za nimi domy z przyłączanym. Co interesujące to pomimo, że obiekty z wbudowanym garażem mają medianę cen najwyższą to najdroższe domy ze wszystkich mają gaże przyłączane do nich. 
+Na wykresie pomiędzy typem garażu, a ceną domu widać, że największą różnorodnośc cen mają nieruchomości z garażem wbudowanym w dom albo przyłączonym do niego. Nieruchomości z wbudowanym garażem mają także najwżyszą medianę cen, następnie za nimi domy z przyłączanym. Co interesujące to pomimo, że obiekty z wbudowanym garażem mają medianę cen najwyższą to najdroższe domy ze wszystkich mają garaże przyłączane do nich. 
 
 
 ```{r, echo=FALSE,warning=FALSE}
@@ -238,7 +262,7 @@ plot <- ggplot(real_estate1 , aes(x=LotConfig, y=SalePrice)) +
   ggtitle("Zależność położenia nieruchomości a ceny.")
 ```
 
-Z wykresu położenia widać największą ilość nieruchomości wolnostojącyh, mają one także największą medianę cen. Warto zwrócić jednak uwagę na dużą ilość obserwacji odstających dla obiektów otoczonych z każdej z 4 stron. 
+Z wykresu położenia widać największą madianę cen mają nieruchomości wolnostojace. Warto zwrócić jednak uwagę na dużą ilość obserwacji odstających dla obiektów otoczonych z każdej z 4 stron. 
 
 
 ```{r, echo=FALSE,warning=FALSE}
@@ -246,10 +270,10 @@ ggplot(real_estate1 , aes(x=Foundation, y=SalePrice)) +
   geom_boxplot()+
   scale_y_continuous(labels = scales::comma)+
   theme_bw()+
-  ggtitle("Zależność rodzaju fundamentóW a ceny.")
+  ggtitle("Zależność rodzaju fundamentów a ceny.")
 ```
 
-Jak widać najwięcej nieruchomości ma fundamenty z kamienia, następne w kolejności są fundamenty z betonu. O ile górny kwantyl ceny dla obu rodzaji fundamentóW jest zblizony do siebie, to widać stosunkowo niską medianę cen dla domów z kamiennymi fundamentami. Także najdroższe domy to przedewszystkim domy o betonowych fundamentach.
+O ile górny kwantyl ceny dla nieruchomosći o kamiennych oraz betonowych fundamentach jest zblizony do siebie, to widać stosunkowo niską medianę cen dla domów z kamiennymi fundamentami. Także najdroższe domy to przedewszystkim takie o betonowych fundamentach.
 
 ```{r, echo=FALSE,warning=FALSE}
 plot <- ggplot(real_estate1 , aes(x=LotArea, y=SalePrice)) + 
