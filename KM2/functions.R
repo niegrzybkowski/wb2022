@@ -26,9 +26,9 @@ lightGBM_function <- function(data, target,
     
     #Tworzenie lgb.datasets treningoego
     data <- lgb.Dataset(
-      data = data,
-      label = target_val,
-      free_raw_data = FALSE
+      data = data
+      , label = target_val
+      , free_raw_data = FALSE
     )
   }
   
@@ -40,8 +40,6 @@ lightGBM_function <- function(data, target,
       , metric = "multi_error"
       , num_class = length(unique(target_val))
       , min_data = 1L
-      , learning_rate = 1.0,
-      nthread = nthread
     )
   }
   else{
@@ -54,14 +52,6 @@ lightGBM_function <- function(data, target,
   }
   
   
-  
-  params <- list(
-    objective = "multiclass"
-    , metric = "multi_error"
-    , num_class = length(unique(target_val))
-    , min_data = 1L
-    , learning_rate = 1.0
-  )
   
   
   # Model
@@ -93,6 +83,7 @@ model <- lightGBM_function(train, "Species" )
 
 
 test <- iris[split1== 1, ]
+test2 <- test[,1:5]
 test <- test[,1:4]
 pred <- lightGBM_predict(model, test)
 
