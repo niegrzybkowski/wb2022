@@ -131,7 +131,7 @@ lightGBM_predict <- function(
   data, 
   target=NULL, 
   autofactor=FALSE, 
-  postprocess=FALSE
+  postprocess=TRUE
   ){
   
   # Drop target if provided
@@ -260,6 +260,7 @@ lgbm_test_multiclass <- function() {
   pred <- lightGBM_predict(model, test, target = "Species", postprocess = TRUE)
   sum(apply(pred, 1, which.max) != as.numeric(test[, "Species"]))
 }
+
 
 ################################################################################
 
