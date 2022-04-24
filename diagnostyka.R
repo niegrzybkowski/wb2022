@@ -1,23 +1,21 @@
 library(ggplot2)
 library(Metrics)
 
-RMSE <- function(actual, pred) {
-  sqrt(colMeans((actual - pred)^2))
-}
+
 
 MAE<- function(actual, pred) {
   mae(actual, pred)
 }
 
 
-plot <- function(actual, pred){
+wykres <- function(actual, pred){
   value <- (pred/actual-1)*100
-
-
+  
+  
   
   data <- data.frame(
-    id= 1:lengths(value),  
-    values=unlist(value)
+    id= 1:length(value),  
+    values=value
   )
   plot <- ggplot(data, aes(x=id, y=values)) + 
     geom_bar(stat = "identity")+
