@@ -44,8 +44,6 @@ CATEGORICAL_FEATURES <- c(
   "PavedDrive", "X3SsnPorch", "ScreenPorch", "Fence", "MiscFeature", "MiscVal", 
   "MoSold", "YrSold", "SaleType", "SaleCondition")
 
-save_data <- function()
-
 load_data_train <- function() {
   read.csv("data/train.csv") %>% tibble()
 }
@@ -144,4 +142,11 @@ other_var_transform <- function(data) {
 datatype_transform <- function(data) {
   data %>%
     mutate(across(any_of(CONTINUOUS_FEATURES), as.numeric))
+}
+
+missing_fill <- function(data) {
+  data %>%
+    mutate(across(any_of(CONTINUOUS_FEATURES), function (x) {replace_na(x, 0.0)} )) %>%
+    mutate(across(any_of(CATEGORICAL_FEATURES), function (x) {replace_na(x, "missing")} )) %>%
+    mutate(across(any_of(EVALUATION_FEATURES), function (x) {replace_na(x, -1L)} ))
 }
